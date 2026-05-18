@@ -8,7 +8,7 @@ app.use(cors());
 
 // Database Configuration
 const db = mysql.createConnection({
-    host: 'localhost', // Change this to your DB container IP if needed
+    host: 'database-server',
     user: 'root',
     password: 'root123',
     database: 'db_test'
@@ -56,4 +56,4 @@ app.delete('/products/:id', (req, res) => {
     });
 });
 
-app.listen(3000, () => console.log('Backend running on port 3000'));
+app.listen(4321, () => console.log('Backend running on port 4321'));
