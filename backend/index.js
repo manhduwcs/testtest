@@ -9,7 +9,7 @@ app.use(cors());
 // Database Configuration
 const db = mysql.createConnection({
     host: 'database-server',
-    user: 'root',
+    user: 'backend',
     password: 'A@123456',
     database: 'db_test'
 });
