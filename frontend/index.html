@@ -49,7 +49,7 @@
     <body>
         <div class="card">
             <h1>Service Bridge</h1>
-            <p>Target: <strong>http://backend-server:3000</strong></p>
+            <p>Target: <strong>http://backend-server:4321</strong></p>
             <button onclick="fetchData()">Fetch Data from Backend</button>
             <div id="response">Response will appear here...</div>
         </div>
@@ -60,9 +60,8 @@
                 display.innerText = "Connecting...";
 
                 try {
-                    // Internal Docker DNS: 'backend-server' resolves to the backend container IP
                     const res = await fetch(
-                        "http://backend-server:3000/api/status",
+                        "http://backend-server:4321/api/status",
                     );
                     const data = await res.json();
                     display.innerText = JSON.stringify(data, null, 2);
