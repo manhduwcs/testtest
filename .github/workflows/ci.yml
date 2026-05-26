@@ -56,7 +56,7 @@ jobs:
             working-directory: ${{ github.workspace }}
             run: |
                 cd ops-files
-                kustomize edit set image ${{ secrets.dockerhub_username }}/backend-test=${{ secrets.dockerhub_username }}/backend-test:{{ github.sha }}
+                kustomize edit set image backend-test:${{ github.sha }}
 
           - name: push change in ops repo to remote
             uses: stefanzweifel/git-auto-commit-action@v5
