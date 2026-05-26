@@ -4,7 +4,6 @@ const mysql = require('mysql2');
 const app = express();
 app.use(express.json());
 
-// Khởi tạo kết nối Pool (Tối ưu hơn Connection đơn cho Production)
 const db = mysql.createPool({
     host: process.env.DB_HOST || 'database-server', // Dùng biến môi trường để linh hoạt hạ tầng
     user: process.env.DB_USER || 'backend',
@@ -14,17 +13,10 @@ const db = mysql.createPool({
     connectionLimit: 10
 });
 
-// ==========================================
-// ỨNG DỤNG KIỂM TRA THỂ TRẠNG (HEALTH CHECKS)
-// ==========================================
-
-// 1. Liveness Probe (/healthz): Trả về 200 ngay lập tức để báo cho K8s biết tiến trình Node.js không bị treo cứng (Deadlock)
 app.get('/healthz', (req, res) => {
     res.status(200).json({ status: 'UP', timestamp: new Date() });
 });
 
-// 2. Readiness Probe (/ready): Check xem Database có thông không.
-// Nếu DB sập, trả về 500 để K8s ngắt kết nối mạng, không đẩy request của khách hàng vào con Pod lỗi này nữa.
 app.get('/ready', (req, res) => {
     db.query('SELECT 1', (err) => {
         if (err) {
