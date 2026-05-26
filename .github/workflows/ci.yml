@@ -35,7 +35,7 @@ jobs:
           - name: Build image and push to hub
             uses: docker/build-push-action@v6
             with:
-                context: .
+                context: ./backend
                 file: ./Dockerfile
                 push: true
                 tags: |
