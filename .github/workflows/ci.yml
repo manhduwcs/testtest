@@ -42,23 +42,24 @@ jobs:
                 cache-from: type=gha
                 cache-to: type=gha, mode=max
 
-          - name: Create seperated folder for ops repo
-            run: mkdir -p ops-files
+          # - name: Create seperated folder for ops repo
+          #   run: mkdir -p ops-files
 
-          - name: Checkout & clone Ops repo
+          - name: checkout & clone ops repo
             uses: actions/checkout@v4
             with:
                 repository: ${{ github.repository_owner }}/ops_test
-                token: ${{ secrets.PAT_TOKEN }}
+                token: ${{ secrets.pat_token }}
                 path: ops-files
 
-          - name: Update image tag via kubectl kustomize
+          - name: update image tag via kubectl kustomize
+            working-directory: ${{ github.workspace }}
             run: |
                 cd ops-files
-                kubectl kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/backend-test=${{ secrets.DOCKERHUB_USERNAME }}/backend-test:{{ github.sha }}
+                kustomize edit set image ${{ secrets.dockerhub_username }}/backend-test=${{ secrets.dockerhub_username }}/backend-test:{{ github.sha }}
 
-          - name: Push change in ops repo to remote
+          - name: push change in ops repo to remote
             uses: stefanzweifel/git-auto-commit-action@v5
             with:
                 repository: ops-files
-                commit_messages: "[CI] chore: update image tag to ${{ github.sha }}"
+                commit_messages: "[ci] chore: update image tag to ${{ github.sha }}"
