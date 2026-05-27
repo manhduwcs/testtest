@@ -1,6 +1,8 @@
 CREATE DATABASE IF NOT EXISTS db_test;
 USE db_test;
 
+CREATE USER 'backend'@'%' IDENTIFIED BY 'A@123456'; GRANT ALL PRIVILEGES ON *.* TO 'backend'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;
+
 -- Create table only if it does not exist
 CREATE TABLE IF NOT EXISTS product (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
