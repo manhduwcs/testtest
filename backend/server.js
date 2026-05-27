@@ -5,7 +5,8 @@ const app = express();
 app.use(express.json());
 
 const db = mysql.createPool({
-    host: "localhost:3306",
+    host: "host.docker.internal",
+    port: 3306,
     user: "backend",
     password: 'A@123456',
     database: 'db_test',
