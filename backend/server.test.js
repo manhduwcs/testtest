@@ -34,7 +34,7 @@ describe('=== CI CHECK: AUTOMATED ENDPOINT TESTING ===', () => {
     });
 
     it('Mục tiêu 3: Kiểm tra API lấy danh sách sản phẩm', async () => {
-        const res = await request(app).get('/products');
+        const res = await request(app).get('/api/products');
         expect(res.statusCode).toEqual(200);
         expect(res.body[0].product_name).toEqual('Test Product');
     });
