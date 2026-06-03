@@ -1,0 +1,23 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+    - name: backend-service
+      url: http://127.0.0.1:4321
+      connect_timeout: 60000
+      read_timeout: 60000
+      write_timeout: 60000
+
+      routes:
+          - name: api-route
+            expression: >
+                (http.path ^= "/api") and
+                (http.protocol == "http" or http.protocol == "https")
+            strip_path: false
+            priority: 10
+
+    - name: frontend-service
+      url: http://127.0.0.1:8101
+      routes:
+          - name: frontend-route
+            expression: (http.path ^= "/api")

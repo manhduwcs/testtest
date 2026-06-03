@@ -62,5 +62,7 @@ app.delete('/products/:id', (req, res) => {
     });
 });
 
+app.use('/api')
+
 // Xuất app ra để file test có thể kéo về chạy offline
 module.exports = { app, db };
