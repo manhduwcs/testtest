@@ -14,6 +14,9 @@ const db = mysql.createPool({
     connectionLimit: 10
 });
 
+// ==========================================
+// INFRASTRUCTURE PROBES (No prefix needed)
+// ==========================================
 app.get('/healthz', (req, res) => {
     res.status(200).json({ status: 'UP', timestamp: new Date() });
 });
@@ -28,17 +31,18 @@ app.get('/ready', (req, res) => {
 });
 
 // ==========================================
-// CÁC TUYẾN ĐƯỜNG NGHIỆP VỤ (CRUD ROUTES)
+// BUSINESS ROUTES (Isolated via Router)
 // ==========================================
+const apiRouter = express.Router();
 
-app.get('/products', (req, res) => {
+apiRouter.get('/products', (req, res) => {
     db.query('SELECT * FROM product', (err, results) => {
         if (err) return res.status(500).send(err);
         res.json(results);
     });
 });
 
-app.post('/products', (req, res) => {
+apiRouter.post('/products', (req, res) => {
     const { product_name, quantity, price } = req.body;
     db.query('INSERT INTO product SET ?', { product_name, quantity, price }, (err, result) => {
         if (err) return res.status(500).send(err);
@@ -46,7 +50,7 @@ app.post('/products', (req, res) => {
     });
 });
 
-app.put('/products/:id', (req, res) => {
+apiRouter.put('/products/:id', (req, res) => {
     const { product_name, quantity, price } = req.body;
     db.query('UPDATE product SET product_name=?, quantity=?, price=? WHERE product_id=?',
     [product_name, quantity, price, req.params.id], (err) => {
@@ -55,14 +59,15 @@ app.put('/products/:id', (req, res) => {
     });
 });
 
-app.delete('/products/:id', (req, res) => {
+apiRouter.delete('/products/:id', (req, res) => {
     db.query('DELETE FROM product WHERE product_id=?', [req.params.id], (err) => {
         if (err) return res.status(500).send(err);
         res.sendStatus(200);
     });
 });
 
-app.use('/api')
+// Mount the router. This forces all routes within apiRouter to prepend /api
+app.use('/api', apiRouter);
 
-// Xuất app ra để file test có thể kéo về chạy offline
+// Export for integration testing
 module.exports = { app, db };
