@@ -10,7 +10,7 @@ services:
 
       routes:
           - name: api-route
-            expression: '(http.path ~ "^/api") and (http.protocol == "http" or http.protocol == "https")'
+            expression: 'http.path ^= "/api" and (net.protocol == "http" or net.protocol == "https")'
             strip_path: false
             priority: 10
 
